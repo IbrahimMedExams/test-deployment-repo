@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GitHub Deployment Test Exam 1782312426377</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@1,400;1,500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
+      --panel-bg: #ffffff;
+      --panel-border: rgba(226, 232, 240, 0.8);
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --accent-color: #2563eb;
+      --accent-hover: #1d4ed8;
+      --accent-glow: rgba(37, 99, 235, 0.15);
+      --correct-color: #059669;
+      --correct-bg: #ecfdf5;
+      --correct-border: #a7f3d0;
+      --incorrect-color: #dc2626;
+      --incorrect-bg: #fef2f2;
+      --incorrect-border: #fca5a5;
+      --shadow-primary: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-gradient);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      overflow-x: hidden;
+    }
+
+    /* Custom prayer ribbon */
+    .prayer-ribbon {
+      width: 100%;
+      max-width: 800px;
+      background: #fffbeb;
+      border: 1px solid #fef3c7;
+      border-radius: 12px;
+      padding: 12px 20px;
+      margin-bottom: 20px;
+      text-align: center;
+      box-shadow: 0 4px 6px -1px rgba(251, 191, 36, 0.05);
+      animation: pulse-border 4s infinite ease-in-out;
+    }
+
+    .prayer-text {
+      font-family: 'Lora', serif;
+      font-style: italic;
+      color: #b45309;
+      font-size: 1.05rem;
+      letter-spacing: 0.2px;
+    }
+
+    @keyframes pulse-border {
+      0%, 100% { border-color: #fef3c7; }
+      50% { border-color: #fcd34d; }
+    }
+
+    /* Header Container */
+    header {
+      width: 100%;
+      max-width: 800px;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+
+    .exam-title {
+      font-size: 2.1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+    }
+
+    /* Main Quiz Container */
+    .quiz-container {
+      width: 100%;
+      max-width: 800px;
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: 20px;
+      padding: 36px;
+      box-shadow: var(--shadow-primary);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    /* Progress Indicator */
+    .progress-wrapper {
+      margin-bottom: 30px;
+    }
+
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .progress-bar-bg {
+      width: 100%;
+      height: 6px;
+      background: #f1f5f9;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--accent-color);
+      border-radius: 3px;
+      transition: width 0.4s ease;
+    }
+
+    /* Question Screen */
+    .question-section {
+      animation: fadeIn 0.3s ease;
+    }
+
+    .question-text {
+      font-size: 1.25rem;
+      font-weight: 600;
+      line-height: 1.5;
+      margin-bottom: 26px;
+      color: var(--text-primary);
+    }
+
+    /* Option Choices */
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 26px;
+    }
+
+    .option-btn {
+      width: 100%;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 16px 20px;
+      text-align: left;
+      font-family: inherit;
+      font-size: 1rem;
+      color: var(--text-primary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.2s ease;
+    }
+
+    .option-btn:hover:not(:disabled) {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+      transform: translateY(-1px);
+    }
+
+    .option-btn:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    .option-btn:disabled {
+      cursor: not-allowed;
+    }
+
+    /* Choice Response States */
+    .option-btn.correct {
+      background: var(--correct-bg) !important;
+      border-color: var(--correct-border) !important;
+      color: var(--correct-color) !important;
+      font-weight: 600;
+    }
+
+    .option-btn.incorrect {
+      background: var(--incorrect-bg) !important;
+      border-color: var(--incorrect-border) !important;
+      color: var(--incorrect-color) !important;
+    }
+
+    .option-icon {
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: 10px;
+    }
+
+    /* Rationale Card */
+    .rationale-card {
+      background: #f8fafc;
+      border-left: 4px solid var(--accent-color);
+      border-radius: 4px 12px 12px 4px;
+      padding: 20px;
+      margin-top: 20px;
+      margin-bottom: 26px;
+      font-size: 0.95rem;
+      line-height: 1.55;
+      color: var(--text-secondary);
+      display: none;
+      animation: slideUp 0.3s ease;
+    }
+
+    .rationale-title {
+      font-weight: 700;
+      color: var(--accent-color);
+      margin-bottom: 6px;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Action Buttons */
+    .actions-panel {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .next-btn {
+      background: var(--accent-color);
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 12px 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .next-btn:hover {
+      background: var(--accent-hover);
+      box-shadow: 0 4px 12px var(--accent-glow);
+    }
+
+    .next-btn:active {
+      transform: scale(0.98);
+    }
+
+    /* Results Screen */
+    .results-section {
+      display: none;
+      text-align: center;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .score-circle-wrapper {
+      position: relative;
+      width: 170px;
+      height: 170px;
+      margin: 0 auto 24px;
+    }
+
+    .score-circle-svg {
+      transform: rotate(-90deg);
+      width: 100%;
+      height: 100%;
+    }
+
+    .score-circle-bg {
+      fill: none;
+      stroke: #f1f5f9;
+      stroke-width: 10;
+    }
+
+    .score-circle-progress {
+      fill: none;
+      stroke: var(--accent-color);
+      stroke-width: 10;
+      stroke-linecap: round;
+      stroke-dasharray: 502;
+      stroke-dashoffset: 502;
+      transition: stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .score-text-overlay {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+
+    .score-percentage {
+      font-size: 2.3rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1;
+    }
+
+    .score-label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      letter-spacing: 0.5px;
+      margin-top: 4px;
+    }
+
+    .result-badge {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .result-summary-text {
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      margin-bottom: 30px;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .restart-btn {
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 12px 24px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .restart-btn:hover {
+      background: #e2e8f0;
+      border-color: #cbd5e1;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 600px) {
+      .quiz-container {
+        padding: 24px 20px;
+      }
+      .exam-title {
+        font-size: 1.7rem;
+      }
+      .question-text {
+        font-size: 1.1rem;
+      }
+      .option-btn {
+        font-size: 0.95rem;
+        padding: 14px 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sticky Prayer Ribbon -->
+  <div class="prayer-ribbon" id="prayerRibbon" style="display: none;">
+    <p class="prayer-text" id="prayerText"></p>
+  </div>
+
+  <header>
+    <h1 class="exam-title" id="examTitle">Exam Quiz</h1>
+  </header>
+
+  <main class="quiz-container">
+    
+    <!-- Quiz Interface Screen -->
+    <div id="quizScreen" class="question-section">
+      <div class="progress-wrapper">
+        <div class="progress-meta">
+          <span id="questionCounter">Question 1 of 10</span>
+          <span id="percentageIndicator">0% Complete</span>
+        </div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="progressBarFill"></div>
+        </div>
+      </div>
+
+      <div class="question-text" id="questionText">
+        Loading question...
+      </div>
+
+      <div class="options-list" id="optionsList">
+        <!-- Buttons injected dynamically -->
+      </div>
+
+      <div class="rationale-card" id="rationaleCard">
+        <div class="rationale-title">Explanation & Rationale</div>
+        <div id="rationaleText">Loading rationale...</div>
+      </div>
+
+      <div class="actions-panel">
+        <button class="next-btn" id="nextBtn" style="visibility: hidden;">
+          <span>Next Question</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Final Results Screen -->
+    <div id="resultsScreen" class="results-section">
+      <div class="result-badge" id="resultBadge">Pass!</div>
+      
+      <div class="score-circle-wrapper">
+        <svg class="score-circle-svg" viewBox="0 0 180 180">
+          <circle class="score-circle-bg" cx="90" cy="90" r="80"></circle>
+          <circle class="score-circle-progress" id="scoreProgressCircle" cx="90" cy="90" r="80"></circle>
+        </svg>
+        <div class="score-text-overlay">
+          <div class="score-percentage" id="scorePercentText">0%</div>
+          <div class="score-label">Score</div>
+        </div>
+      </div>
+
+      <p class="result-summary-text" id="resultSummaryText">
+        You answered 0 out of 0 questions correctly.
+      </p>
+
+      <button class="restart-btn" id="restartBtn">Retake Quiz</button>
+    </div>
+
+  </main>
+
+  <script>
+    // Injected variables
+    const examTitle = "GitHub Deployment Test Exam 1782312426377";
+    const customPrayer = "Test prayer!";
+    
+    // Injected questions
+    const questions = [
+  {
+    "q": "Test",
+    "options": [
+      "a",
+      "b"
+    ],
+    "correct": 0,
+    "rationale": "Test"
+  }
+];
+
+    // State Variables
+    let currentIndex = 0;
+    let score = 0;
+    let selectedAnswer = null;
+
+    // DOM Elements
+    const examTitleEl = document.getElementById('examTitle');
+    const prayerRibbon = document.getElementById('prayerRibbon');
+    const prayerText = document.getElementById('prayerText');
+    const quizScreen = document.getElementById('quizScreen');
+    const resultsScreen = document.getElementById('resultsScreen');
+    const questionCounter = document.getElementById('questionCounter');
+    const percentageIndicator = document.getElementById('percentageIndicator');
+    const progressBarFill = document.getElementById('progressBarFill');
+    const questionText = document.getElementById('questionText');
+    const optionsList = document.getElementById('optionsList');
+    const rationaleCard = document.getElementById('rationaleCard');
+    const rationaleText = document.getElementById('rationaleText');
+    const nextBtn = document.getElementById('nextBtn');
+    const resultBadge = document.getElementById('resultBadge');
+    const scoreProgressCircle = document.getElementById('scoreProgressCircle');
+    const scorePercentText = document.getElementById('scorePercentText');
+    const resultSummaryText = document.getElementById('resultSummaryText');
+    const restartBtn = document.getElementById('restartBtn');
+
+    // Initialize Quiz
+    function init() {
+      examTitleEl.textContent = examTitle || 'Exam Quiz';
+      
+      if (customPrayer && customPrayer.trim() !== '') {
+        prayerText.textContent = customPrayer;
+        prayerRibbon.style.display = 'block';
+      } else {
+        prayerRibbon.style.display = 'none';
+      }
+
+      currentIndex = 0;
+      score = 0;
+      
+      quizScreen.style.display = 'block';
+      resultsScreen.style.display = 'none';
+
+      if (!questions || questions.length === 0) {
+        questionText.textContent = "No questions found. Please check your data source.";
+        optionsList.innerHTML = '';
+        return;
+      }
+
+      loadQuestion(currentIndex);
+    }
+
+    // Load Question
+    function loadQuestion(index) {
+      selectedAnswer = null;
+      nextBtn.style.visibility = 'hidden';
+      rationaleCard.style.display = 'none';
+
+      const totalQuestions = questions.length;
+      questionCounter.textContent = `Question ${index + 1} of ${totalQuestions}`;
+      const percentage = Math.round((index / totalQuestions) * 100);
+      percentageIndicator.textContent = `${percentage}% Complete`;
+      progressBarFill.style.width = `${(index / totalQuestions) * 100}%`;
+
+      const currentQuestion = questions[index];
+      questionText.textContent = currentQuestion.q;
+
+      optionsList.innerHTML = '';
+      currentQuestion.options.forEach((option, optionIndex) => {
+        const button = document.createElement('button');
+        button.className = 'option-btn';
+        button.innerHTML = `
+          <span>${escapeHtml(option)}</span>
+          <span class="option-icon" id="icon-${optionIndex}"></span>
+        `;
+        button.addEventListener('click', () => selectOption(optionIndex));
+        optionsList.appendChild(button);
+      });
+    }
+
+    // Handle Option Selection
+    function selectOption(index) {
+      if (selectedAnswer !== null) return;
+      
+      selectedAnswer = index;
+      const currentQuestion = questions[currentIndex];
+      const isCorrect = (index === currentQuestion.correct);
+      
+      if (isCorrect) score++;
+
+      const buttons = optionsList.getElementsByClassName('option-btn');
+      for (let i = 0; i < buttons.length; i++) {
+        buttons[i].disabled = true;
+        const iconEl = document.getElementById(`icon-${i}`);
+
+        if (i === currentQuestion.correct) {
+          buttons[i].classList.add('correct');
+          iconEl.innerHTML = `
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="color: var(--correct-color);">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          `;
+        } else if (i === index) {
+          buttons[i].classList.add('incorrect');
+          iconEl.innerHTML = `
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="color: var(--incorrect-color);">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          `;
+        }
+      }
+
+      rationaleText.textContent = currentQuestion.rationale || "No additional explanation provided for this question.";
+      rationaleCard.style.display = 'block';
+      nextBtn.style.visibility = 'visible';
+    }
+
+    // Show Results
+    function showResults() {
+      progressBarFill.style.width = '100%';
+      percentageIndicator.textContent = '100% Complete';
+
+      quizScreen.style.display = 'none';
+      resultsScreen.style.display = 'block';
+
+      const total = questions.length;
+      const finalPercentage = Math.round((score / total) * 100);
+
+      if (finalPercentage >= 85) {
+        resultBadge.textContent = '🎓 Excellent Work!';
+        resultBadge.style.color = '#1e3a8a';
+      } else if (finalPercentage >= 70) {
+        resultBadge.textContent = '👏 Pass with Merit';
+        resultBadge.style.color = '#1d4ed8';
+      } else if (finalPercentage >= 50) {
+        resultBadge.textContent = '✔️ Pass';
+        resultBadge.style.color = '#059669';
+      } else {
+        resultBadge.textContent = '📖 Review Needed';
+        resultBadge.style.color = '#b91c1c';
+      }
+
+      scorePercentText.textContent = `${finalPercentage}%`;
+      resultSummaryText.textContent = `You answered ${score} out of ${total} questions correctly.`;
+
+      const circumference = 2 * Math.PI * 80;
+      const offset = circumference - (finalPercentage / 100) * circumference;
+      
+      setTimeout(() => {
+        scoreProgressCircle.style.strokeDashoffset = offset;
+      }, 150);
+    }
+
+    // Event Listeners
+    nextBtn.addEventListener('click', () => {
+      currentIndex++;
+      if (currentIndex < questions.length) {
+        loadQuestion(currentIndex);
+      } else {
+        showResults();
+      }
+    });
+
+    restartBtn.addEventListener('click', () => {
+      scoreProgressCircle.style.strokeDashoffset = 502;
+      init();
+    });
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
+
+<script id="exam-metadata" type="application/json">{"title":"GitHub Deployment Test Exam 1782312426377","prayer":"Test prayer!","templateName":"nordic_frost.html","questions":[{"q":"Test","options":["a","b"],"correct":0,"rationale":"Test"}]}</script>
